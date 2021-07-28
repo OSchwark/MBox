@@ -9,6 +9,8 @@ Setting up a toniebox like audio playback device
 `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10`
 6. Add mopidy gpg key
 `wget -q -O - https://apt.mopidy.com/mopidy.gpg | sudo apt-key add -`
+7. `sudo wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list`
+
 
 
 
