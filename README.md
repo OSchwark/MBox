@@ -15,6 +15,8 @@ Setting up a toniebox like audio playback device
 sudo apt-get update
 sudo apt-get install python-spotify
 ```
+9. Find api key https://github.com/search?q=spotify-appkey 
+
 
 
 
