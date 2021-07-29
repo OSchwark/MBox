@@ -10,13 +10,13 @@ Setting up a toniebox like audio playback device
 6. Add mopidy gpg key
 `wget -q -O - https://apt.mopidy.com/mopidy.gpg | sudo apt-key add -`
 7. `sudo wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list`
-8. Install python-spotify
+8. Install python3-spotify
 ``` 
 sudo apt-get update
 sudo apt-get install python-spotify
 ```
 9. Find api key https://github.com/search?q=spotify-appkey 
-
+10. install pyalsaaudio `sudo apt-get install python-alsaaudio`
 
 
 
