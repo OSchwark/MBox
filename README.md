@@ -16,7 +16,7 @@ sudo apt-get update
 sudo apt-get install python-spotify
 ```
 9. Find api key https://github.com/search?q=spotify-appkey 
-10. install pyalsaaudio `sudo apt-get install python-alsaaudio`
+10. install pyalsaaudio `pip install pyalsaaudio`
 
 
 
