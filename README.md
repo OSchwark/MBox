@@ -1,7 +1,7 @@
 # MBox
 Setting up a toniebox like audio playback device
 
-1. Install raspberry pi OS on SD card
+1. Install raspberry pi OS on SD card using raspberry pi imager (https://www.raspberrypi.org/software/)
 2. create `ssh` file on SD card to enable ssh
 3. boot sd card in raspberry pi
 4. Ssh into it
