@@ -17,11 +17,10 @@ sudo apt-get install python-spotify
 ```
 9. Find api key https://github.com/search?q=spotify-appkey 
 10. install pyalsaaudio `pip install pyalsaaudio`
-
-
-
+11. if you have installed the full raspbian you might want to get rid of the screen reader install instruction audio file playing every 30s:
+    1. `ps -eaf | grep wiz` and then kill the process `piwiz`
+    2. `sudo rm /etc/xdg/autostart/piwiz.desktop`
 
 
 
 *(undo with `sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 10`
-
