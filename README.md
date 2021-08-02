@@ -20,7 +20,10 @@ sudo apt-get install python-spotify
 11. if you have installed the full raspbian you might want to get rid of the screen reader install instruction audio file playing every 30s:
     1. `ps -eaf | grep wiz` and then kill the process `piwiz`
     2. `sudo rm /etc/xdg/autostart/piwiz.desktop`
-
+12. copy files
+13. copy service file to root `sudo cp myscript.service /etc/systemd/system/myscript.service`
+14. reload services `sudo systemctl daemon-reload`
+15. enable service `sudo systemctl enable myscript.service`
 
 
 *(undo with `sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 10`
