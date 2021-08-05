@@ -13,7 +13,7 @@ Setting up a toniebox like audio playback device
 8. Install python3-spotify
 ``` 
 sudo apt-get update
-sudo apt-get install python-spotify
+sudo apt-get install python3-spotify
 ```
 9. Find api key https://github.com/search?q=spotify-appkey 
 10. install pyalsaaudio `pip install pyalsaaudio`
