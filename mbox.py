@@ -63,6 +63,7 @@ session.on(
     spotify.SessionEvent.CONNECTION_STATE_UPDATED,
     connection_state_listener)
 # session.login('username', 'password', remember_me=True)
+tracks = []
 session.relogin()
 session.on(spotify.SessionEvent.PLAY_TOKEN_LOST, playing_on_other_device)
 session.on(spotify.SessionEvent.END_OF_TRACK, on_song_end)
@@ -81,7 +82,6 @@ num_of_cycles_card_not_found = 0
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
 MIFAREReader = MFRC522.MFRC522()
-tracks = []
 while continue_reading:
     # Scan for cards
     (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
