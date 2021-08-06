@@ -12,6 +12,8 @@ TERMINATOR_TLV = b'\xFE'
 continue_reading = True
 URI_RECORD_TYPE = 'urn:nfc:wkt:U'
 tracks = []
+# todo clear tracks when new card is detected
+# todo continue playback when card is found again
 
 logged_in_event = threading.Event()
 
