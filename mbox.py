@@ -42,6 +42,7 @@ def on_song_end(signal_session):
 def play_next_song():
     print('playing next song')
     print('songs in queue:')
+    print(tracks)
     global tracks
     if tracks:
         track = tracks.pop(0)
@@ -65,6 +66,8 @@ session.on(
 session.relogin()
 session.on(spotify.SessionEvent.PLAY_TOKEN_LOST, playing_on_other_device)
 session.on(spotify.SessionEvent.END_OF_TRACK, on_song_end)
+event_loop = spotify.EventLoop(session)
+event_loop.start()
 while not logged_in_event.wait(0.1):
     session.process_events()
 print('logged in')
