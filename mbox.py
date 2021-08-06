@@ -7,6 +7,7 @@ import spotify
 import threading
 
 # marks last tlv block in data area
+CACHE_SIZE_IN_MB = 1024
 TERMINATOR_TLV = b'\xFE'
 continue_reading = True
 URI_RECORD_TYPE = 'urn:nfc:wkt:U'
@@ -34,10 +35,26 @@ def playing_on_other_device(signal_session):
     signal_session.player.pause()
 
 
+def on_song_end(signal_session):
+    play_next_song()
+
+
+def play_next_song():
+    if tracks:
+        track = tracks.pop(0)
+        track.load()
+        session.player.load(track)
+        session.player.play()
+        global playing
+        playing = True
+
+
 print('logging in...')
 config = spotify.Config()
 config.cache_location = b'/home/pi/cache'
+config.user_agent = 'mbox'
 session = spotify.Session(config=config)
+session.set_cache_size(CACHE_SIZE_IN_MB)
 session.on(
     spotify.SessionEvent.CONNECTION_STATE_UPDATED,
     connection_state_listener)
@@ -92,12 +109,14 @@ while continue_reading:
             # MIFAREReader.MFRC522_StopCrypto1()
             for record in ndef.message_decoder(bytes(result[23:])):
                 if record.type == URI_RECORD_TYPE:
-                    print('playing ' + record.iri)
-                    track = session.get_track(record.iri)
-                    track.load()
-                    session.player.load(track)
-                    session.player.play()
-                    playing = True
+                    print('loading album ' + record.iri)
+                    album = session.get_album(record.iri)
+                    # not sure if we need it
+                    # album.load()
+                    album_browser = album.browse()
+                    album_browser.load()
+                    tracks = album_browser.tracks
+                    play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
     sleep(1)
