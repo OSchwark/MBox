@@ -42,6 +42,7 @@ def on_song_end(signal_session):
 def play_next_song():
     print('playing next song')
     print('songs in queue:')
+    global tracks
     if tracks:
         track = tracks.pop(0)
         track.load()
@@ -77,6 +78,7 @@ num_of_cycles_card_not_found = 0
 # Hook the SIGINT
 signal.signal(signal.SIGINT, end_read)
 MIFAREReader = MFRC522.MFRC522()
+tracks = []
 while continue_reading:
     # Scan for cards
     (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
@@ -119,7 +121,6 @@ while continue_reading:
                     album_browser = album.browse()
                     album_browser.load()
                     tracks_sequence = album_browser.tracks
-                    tracks = []
                     for t in tracks_sequence:
                         tracks.append(t)
                     play_next_song()
