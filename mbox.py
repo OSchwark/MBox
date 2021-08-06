@@ -61,6 +61,7 @@ session.on(
 # session.login('username', 'password', remember_me=True)
 session.relogin()
 session.on(spotify.SessionEvent.PLAY_TOKEN_LOST, playing_on_other_device)
+session.on(spotify.SessionEvent.END_OF_TRACK, on_song_end)
 while not logged_in_event.wait(0.1):
     session.process_events()
 print('logged in')
@@ -115,7 +116,10 @@ while continue_reading:
                     # album.load()
                     album_browser = album.browse()
                     album_browser.load()
-                    tracks = album_browser.tracks
+                    tracks_sequence = album_browser.tracks
+                    tracks = []
+                    for t in tracks_sequence:
+                        tracks.append(t)
                     play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
