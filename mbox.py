@@ -11,6 +11,7 @@ CACHE_SIZE_IN_MB = 1024
 TERMINATOR_TLV = b'\xFE'
 continue_reading = True
 URI_RECORD_TYPE = 'urn:nfc:wkt:U'
+tracks = []
 
 logged_in_event = threading.Event()
 
@@ -42,8 +43,8 @@ def on_song_end(signal_session):
 def play_next_song():
     print('playing next song')
     print('songs in queue:')
-    print(tracks)
     global tracks
+    print(tracks)
     if tracks:
         track = tracks.pop(0)
         track.load()
@@ -63,7 +64,6 @@ session.on(
     spotify.SessionEvent.CONNECTION_STATE_UPDATED,
     connection_state_listener)
 # session.login('username', 'password', remember_me=True)
-tracks = []
 session.relogin()
 session.on(spotify.SessionEvent.PLAY_TOKEN_LOST, playing_on_other_device)
 session.on(spotify.SessionEvent.END_OF_TRACK, on_song_end)
