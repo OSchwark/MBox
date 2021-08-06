@@ -40,6 +40,8 @@ def on_song_end(signal_session):
 
 
 def play_next_song():
+    print('playing next song')
+    print('songs in queue:')
     if tracks:
         track = tracks.pop(0)
         track.load()
