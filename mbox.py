@@ -41,6 +41,7 @@ def playing_on_other_device(signal_session):
 
 
 def on_song_end(signal_session):
+    global track
     track = None
     play_next_song()
 
