@@ -134,6 +134,8 @@ while continue_reading:
                         for t in tracks_sequence:
                             tracks.append(t)
                         play_next_song()
+                    else:
+                        play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
     sleep(1)
