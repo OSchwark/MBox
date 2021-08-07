@@ -12,6 +12,8 @@ TERMINATOR_TLV = b'\xFE'
 continue_reading = True
 URI_RECORD_TYPE = 'urn:nfc:wkt:U'
 tracks = []
+track = None
+currently_playing_content = None
 # todo clear tracks when new card is detected
 # todo continue playback when card is found again
 
@@ -46,13 +48,18 @@ def play_next_song():
     print('playing next song')
     print('songs in queue:')
     global tracks
+    global track
+    global playing
     print(tracks)
+    if track:
+        session.player.play()
+        playing = True
+        return
     if tracks:
         track = tracks.pop(0)
         track.load()
         session.player.load(track)
         session.player.play()
-        global playing
         playing = True
 
 
@@ -101,8 +108,6 @@ while continue_reading:
         print("Card detected")
         (status, uid) = MIFAREReader.MFRC522_SelectTagSN()
         if status == MIFAREReader.MI_OK and not playing:
-            # Select the scanned tag
-            # MIFAREReader.MFRC522_SelectTag(uid)
             num_of_cycles_card_not_found = 0
             i = 0
             result = []
@@ -110,25 +115,25 @@ while continue_reading:
                 temp_data = MIFAREReader.MFRC522_Read(i)
                 if temp_data is None:
                     break
+                # TODO find out why we read 8 bytes but only 4 are usable
                 result = result + temp_data[:4]
-                # print(bytes(temp_data).decode("ascii","ignore"))
-                # print("\n")
                 i = i + 1
                 if TERMINATOR_TLV in temp_data:
                     break
-            # MIFAREReader.MFRC522_StopCrypto1()
+            # TODO find out why we need to skip 23 bytes
             for record in ndef.message_decoder(bytes(result[23:])):
                 if record.type == URI_RECORD_TYPE:
-                    print('loading album ' + record.iri)
-                    album = session.get_album(record.iri)
-                    # not sure if we need it
-                    # album.load()
-                    album_browser = album.browse()
-                    album_browser.load()
-                    tracks_sequence = album_browser.tracks
-                    for t in tracks_sequence:
-                        tracks.append(t)
-                    play_next_song()
+                    if record.iri != currently_playing_content:
+                        print('loading album ' + record.iri)
+                        album = session.get_album(record.iri)
+                        album_browser = album.browse()
+                        album_browser.load()
+                        tracks_sequence = album_browser.tracks
+                        tracks = []
+                        currently_playing_content = record.iri
+                        for t in tracks_sequence:
+                            tracks.append(t)
+                        play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
     sleep(1)
