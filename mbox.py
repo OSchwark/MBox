@@ -113,7 +113,6 @@ while continue_reading:
 
     # If a card is found
     if status == MIFAREReader.MI_OK:
-        print("Card detected")
         num_of_cycles_card_not_found = 0
     if status == MIFAREReader.MI_OK and not playing:
         print("Card found while not playing")
