@@ -108,14 +108,18 @@ while continue_reading:
             print('card removed while playing, pausing playback')
             session.player.pause()
             playing = False
+            sleep(1)
+            continue
 
     # If a card is found
     if status == MIFAREReader.MI_OK:
+        print("Card detected")
         num_of_cycles_card_not_found = 0
     if status == MIFAREReader.MI_OK and not playing:
-        print("Card detected")
+        print("Card found while not playing")
         (status, uid) = MIFAREReader.MFRC522_SelectTagSN()
         if status == MIFAREReader.MI_OK and not playing:
+            print("card successfully found and selected while not playing")
             i = 0
             result = []
             while True:
@@ -131,7 +135,7 @@ while continue_reading:
             for record in ndef.message_decoder(bytes(result[23:])):
                 if record.type == URI_RECORD_TYPE:
                     if record.iri != currently_playing_content:
-                        print('loading album ' + record.iri)
+                        print("new album found: " + str(record.iri) + " (previous: " + str(currently_playing_content) + ")")
                         album = session.get_album(record.iri)
                         album_browser = album.browse()
                         album_browser.load()
@@ -139,7 +143,9 @@ while continue_reading:
                         tracks = []
                         currently_playing_content = record.iri
                         for t in tracks_sequence:
-                            tracks.append(t)
+                           tracks.append(t)
+                    else:
+                        print("found card again, continue playback")
                     play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
