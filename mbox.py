@@ -141,9 +141,10 @@ while continue_reading:
                         album_browser.load()
                         tracks_sequence = album_browser.tracks
                         tracks = []
+                        track = None
                         currently_playing_content = record.iri
                         for t in tracks_sequence:
-                           tracks.append(t)
+                            tracks.append(t)
                     else:
                         print("found card again, continue playback")
                     play_next_song()
