@@ -52,6 +52,7 @@ def play_next_song():
     global tracks
     global track
     global playing
+    global currently_playing_content
     print(tracks)
     if track:
         session.player.play()
@@ -63,6 +64,11 @@ def play_next_song():
         session.player.load(track)
         session.player.play()
         playing = True
+        return
+    # we have no single track to resume and no playlist left
+    playing = False
+    track = None
+    currently_playing_content = None
 
 
 print('logging in...')
@@ -104,13 +110,12 @@ while continue_reading:
             playing = False
 
     # If a card is found
-    if status == MIFAREReader.MI_OK and playing:
+    if status == MIFAREReader.MI_OK:
         num_of_cycles_card_not_found = 0
     if status == MIFAREReader.MI_OK and not playing:
         print("Card detected")
         (status, uid) = MIFAREReader.MFRC522_SelectTagSN()
         if status == MIFAREReader.MI_OK and not playing:
-            num_of_cycles_card_not_found = 0
             i = 0
             result = []
             while True:
@@ -135,9 +140,7 @@ while continue_reading:
                         currently_playing_content = record.iri
                         for t in tracks_sequence:
                             tracks.append(t)
-                        play_next_song()
-                    else:
-                        play_next_song()
+                    play_next_song()
                     break
     MIFAREReader.MFRC522_StopCrypto1()
     sleep(1)
