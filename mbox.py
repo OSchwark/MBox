@@ -5,6 +5,7 @@ import ndef
 from time import sleep
 import spotify
 import threading
+import re
 
 # marks last tlv block in data area
 CACHE_SIZE_IN_MB = 1024
@@ -14,10 +15,18 @@ URI_RECORD_TYPE = 'urn:nfc:wkt:U'
 tracks = []
 track = None
 currently_playing_content = None
+regex = r'https:\/\/[^.]*?\.spotify.com\/(?P<type>[^/]*?)\/(?P<id>[^?].*)(\?.*)$'
 # todo clear tracks when new card is detected
 # todo continue playback when card is found again
 
 logged_in_event = threading.Event()
+
+
+def url_to_uri(url):
+    matcher = re.search(regex, url)
+    if matcher:
+        return 'spotify:{}:{}'.format(matcher.group('type'), matcher.group('id'))
+    return url
 
 
 def connection_state_listener(signal_session):
@@ -133,15 +142,16 @@ while continue_reading:
             # TODO find out why we need to skip 23 bytes
             for record in ndef.message_decoder(bytes(result[23:])):
                 if record.type == URI_RECORD_TYPE:
-                    if record.iri != currently_playing_content:
-                        print("new album found: " + str(record.iri) + " (previous: " + str(currently_playing_content) + ")")
-                        album = session.get_album(record.iri)
+                    uri = url_to_uri(record.iri)
+                    if uri != currently_playing_content:
+                        print("new album found: " + str(uri) + " (previous: " + str(currently_playing_content) + ")")
+                        album = session.get_album(uri)
                         album_browser = album.browse()
                         album_browser.load()
                         tracks_sequence = album_browser.tracks
                         tracks = []
                         track = None
-                        currently_playing_content = record.iri
+                        currently_playing_content = uri
                         for t in tracks_sequence:
                             tracks.append(t)
                     else:
