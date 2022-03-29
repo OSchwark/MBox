@@ -6,8 +6,10 @@ Setting up a toniebox like audio playback device
 3. boot sd card in raspberry pi
 4. Ssh into it
 5. Add mopidy gpg key
-`sudo mkdir -p /usr/local/share/keyrings
-sudo wget -q -O /usr/local/share/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg`
+```
+sudo mkdir -p /usr/local/share/keyrings
+sudo wget -q -O /usr/local/share/keyrings/mopidy-archive-keyring.gpg https://apt.mopidy.com/mopidy.gpg
+```
 7. `sudo wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/buster.list`
 8. Install python3-spotify
 ``` 
